@@ -52,17 +52,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
+      // Actualizar el estado del usuario en la caché
       queryClient.setQueryData(["/api/user"], user);
-      navigate("/");
+      
+      // Mostrar notificación de inicio de sesión exitoso
       toast({
-        title: "Logged in",
-        description: `Welcome back, ${user.displayName}!`,
+        title: "Sesión iniciada",
+        description: `Bienvenido de nuevo, ${user.displayName}!`,
       });
+      
+      console.log("Redirigiendo al usuario a /");
+      
+      // Usar setTimeout para asegurar que la redirección ocurra después de la actualización del estado
+      setTimeout(() => {
+        window.location.href = "/"; // Redirección forzada en lugar de usar navigate
+      }, 300);
     },
     onError: (error: Error) => {
       toast({
-        title: "Login failed",
-        description: error.message || "Invalid username or password",
+        title: "Error al iniciar sesión",
+        description: error.message || "Nombre de usuario o contraseña incorrectos",
         variant: "destructive",
       });
     },
@@ -74,17 +83,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {
+      // Actualizar el estado del usuario en la caché
       queryClient.setQueryData(["/api/user"], user);
-      navigate("/");
+      
+      // Mostrar notificación de registro exitoso
       toast({
-        title: "Registration successful",
-        description: `Welcome to NotifyFlow, ${user.displayName}!`,
+        title: "Registro exitoso",
+        description: `Bienvenido a NotifyFlow, ${user.displayName}!`,
       });
+      
+      console.log("Redirigiendo al usuario a /");
+      
+      // Usar setTimeout para asegurar que la redirección ocurra después de la actualización del estado
+      setTimeout(() => {
+        window.location.href = "/"; // Redirección forzada en lugar de usar navigate
+      }, 300);
     },
     onError: (error: Error) => {
       toast({
-        title: "Registration failed",
-        description: error.message || "Could not create account. Please try again.",
+        title: "Error al registrarse",
+        description: error.message || "No se pudo crear la cuenta. Por favor, inténtalo de nuevo.",
         variant: "destructive",
       });
     },
@@ -106,10 +124,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         description: "Has cerrado sesión correctamente.",
       });
       
-      // Asegurarnos que la redirección ocurra después del estado
+      console.log("Redirigiendo al usuario a /auth");
+      
+      // Usar redirección forzada para asegurar que ocurra
       setTimeout(() => {
-        navigate("/auth");
-      }, 100);
+        window.location.href = "/auth"; // Redirección forzada en lugar de usar navigate
+      }, 300);
     },
     onError: (error: Error) => {
       toast({
