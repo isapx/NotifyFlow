@@ -1,13 +1,14 @@
-import { 
-  users, type User, type InsertUser,
-  connections, type Connection, type InsertConnection,
-  notifications, type Notification, type InsertNotification,
-  qrCodes, type QrCode, type InsertQrCode
-} from "@shared/schema";
+import { User, InsertUser, Connection, InsertConnection, Notification, InsertNotification, QrCode, users, connections, notifications, qrCodes } from "@shared/schema";
 import { nanoid } from "nanoid";
 import { add } from "date-fns";
+import { db } from "./db";
+import { eq, and, or, desc } from "drizzle-orm";
+import connectPg from "connect-pg-simple";
+import session from "express-session";
+import { pool } from "./db";
 
-// Storage interface
+const PostgresSessionStore = connectPg(session);
+
 export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
@@ -32,186 +33,180 @@ export interface IStorage {
   createQrCode(userId: number): Promise<QrCode>;
   getQrCodeByCode(code: string): Promise<QrCode | undefined>;
   validateQrCode(code: string): Promise<QrCode | undefined>;
+
+  // Session store
+  sessionStore: session.Store;
 }
 
-// Memory storage implementation
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private connections: Map<number, Connection>;
-  private notifications: Map<number, Notification>;
-  private qrCodes: Map<number, QrCode>;
-  
-  userCurrentId: number;
-  connectionCurrentId: number;
-  notificationCurrentId: number;
-  qrCodeCurrentId: number;
+export class DatabaseStorage implements IStorage {
+  sessionStore: session.Store;
 
   constructor() {
-    this.users = new Map();
-    this.connections = new Map();
-    this.notifications = new Map();
-    this.qrCodes = new Map();
-    
-    this.userCurrentId = 1;
-    this.connectionCurrentId = 1;
-    this.notificationCurrentId = 1;
-    this.qrCodeCurrentId = 1;
+    this.sessionStore = new PostgresSessionStore({ 
+      pool, 
+      createTableIfMissing: true,
+      tableName: 'session'
+    });
   }
-
+  
   // User operations
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
   }
-
+  
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
   }
-
+  
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.userCurrentId++;
-    const createdAt = new Date();
-    const user: User = { ...insertUser, id, createdAt };
-    this.users.set(id, user);
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
   
   // Connection operations
   async createConnection(insertConnection: InsertConnection): Promise<Connection> {
-    const id = this.connectionCurrentId++;
-    const createdAt = new Date();
-    const connection: Connection = { 
-      ...insertConnection, 
-      id, 
-      createdAt, 
-      closedAt: null,
-      status: insertConnection.status || "active" 
+    // Ensure status has a value
+    const connectionData = {
+      ...insertConnection,
+      status: insertConnection.status || "active"
     };
-    this.connections.set(id, connection);
+    
+    const [connection] = await db.insert(connections).values(connectionData).returning();
     return connection;
   }
   
   async getConnection(id: number): Promise<Connection | undefined> {
-    return this.connections.get(id);
+    const [connection] = await db.select().from(connections).where(eq(connections.id, id));
+    return connection;
   }
   
   async getConnectionsByBusinessId(businessId: number): Promise<Connection[]> {
-    return Array.from(this.connections.values()).filter(
-      (connection) => connection.businessId === businessId
-    );
+    return await db.select().from(connections).where(eq(connections.businessId, businessId));
   }
   
   async getConnectionsByCustomerId(customerId: number): Promise<Connection[]> {
-    return Array.from(this.connections.values()).filter(
-      (connection) => connection.customerId === customerId
-    );
+    return await db.select().from(connections).where(eq(connections.customerId, customerId));
   }
   
   async getActiveConnections(userId: number): Promise<Connection[]> {
-    return Array.from(this.connections.values()).filter(
-      (connection) => 
-        (connection.businessId === userId || connection.customerId === userId) &&
-        connection.status === "active"
+    return await db.select().from(connections).where(
+      and(
+        or(
+          eq(connections.businessId, userId),
+          eq(connections.customerId, userId)
+        ),
+        eq(connections.status, "active")
+      )
     );
   }
   
   async closeConnection(id: number): Promise<Connection> {
-    const connection = this.connections.get(id);
+    const [connection] = await db
+      .update(connections)
+      .set({
+        status: "closed",
+        closedAt: new Date()
+      })
+      .where(eq(connections.id, id))
+      .returning();
+    
     if (!connection) {
       throw new Error(`Connection with id ${id} not found`);
     }
     
-    const updatedConnection = {
-      ...connection,
-      status: "closed",
-      closedAt: new Date()
-    };
-    
-    this.connections.set(id, updatedConnection);
-    return updatedConnection;
+    return connection;
   }
   
   // Notification operations
   async createNotification(insertNotification: InsertNotification): Promise<Notification> {
-    const id = this.notificationCurrentId++;
-    const createdAt = new Date();
-    // Create a correctly typed notification object with default isRead value
-    const notification: Notification = { 
-      id, 
-      title: insertNotification.title,
-      message: insertNotification.message,
-      connectionId: insertNotification.connectionId,
-      createdAt, 
-      isRead: false 
-    };
-    this.notifications.set(id, notification);
+    const [notification] = await db
+      .insert(notifications)
+      .values({
+        ...insertNotification,
+        isRead: false
+      })
+      .returning();
+    
     return notification;
   }
   
   async getNotificationsByConnectionId(connectionId: number): Promise<Notification[]> {
-    return Array.from(this.notifications.values()).filter(
-      (notification) => notification.connectionId === connectionId
-    );
+    return await db
+      .select()
+      .from(notifications)
+      .where(eq(notifications.connectionId, connectionId));
   }
   
   async getNotificationsForUser(userId: number): Promise<Notification[]> {
-    // First get all connections for this user
-    const connections = Array.from(this.connections.values()).filter(
-      (connection) => connection.businessId === userId || connection.customerId === userId
-    );
+    // Get all connections for this user
+    const userConnections = await db
+      .select({ id: connections.id })
+      .from(connections)
+      .where(
+        or(
+          eq(connections.businessId, userId),
+          eq(connections.customerId, userId)
+        )
+      );
     
-    const connectionIds = connections.map(connection => connection.id);
+    const connectionIds = userConnections.map(c => c.id);
     
-    // Then get all notifications for these connections
-    return Array.from(this.notifications.values())
-      .filter(notification => connectionIds.includes(notification.connectionId))
-      .sort((a, b) => {
-        // Handle potentially null dates by defaulting to current time
-        const timeA = a.createdAt?.getTime() || Date.now();
-        const timeB = b.createdAt?.getTime() || Date.now();
-        return timeB - timeA; // Sort newest first
-      });
+    if (connectionIds.length === 0) {
+      return [];
+    }
+    
+    // Get notifications for these connections
+    return await db
+      .select()
+      .from(notifications)
+      .where(
+        connectionIds.length > 0 ? 
+          or(...connectionIds.map(id => eq(notifications.connectionId, id))) 
+          : undefined
+      )
+      .orderBy(desc(notifications.createdAt));
   }
   
   async markNotificationAsRead(id: number): Promise<Notification> {
-    const notification = this.notifications.get(id);
+    const [notification] = await db
+      .update(notifications)
+      .set({ isRead: true })
+      .where(eq(notifications.id, id))
+      .returning();
+    
     if (!notification) {
       throw new Error(`Notification with id ${id} not found`);
     }
     
-    const updatedNotification = {
-      ...notification,
-      isRead: true
-    };
-    
-    this.notifications.set(id, updatedNotification);
-    return updatedNotification;
+    return notification;
   }
   
   // QR Code operations
   async createQrCode(userId: number): Promise<QrCode> {
-    const id = this.qrCodeCurrentId++;
     const code = nanoid(10); // Generate a random code
-    const createdAt = new Date();
-    const expiresAt = add(createdAt, { minutes: 5 }); // QR code expires in 5 minutes
+    const expiresAt = add(new Date(), { minutes: 5 }); // QR code expires in 5 minutes
     
-    const qrCode: QrCode = {
-      id,
-      userId,
-      code,
-      expiresAt,
-      createdAt
-    };
+    const [qrCode] = await db
+      .insert(qrCodes)
+      .values({
+        userId,
+        code,
+        expiresAt
+      })
+      .returning();
     
-    this.qrCodes.set(id, qrCode);
     return qrCode;
   }
   
   async getQrCodeByCode(code: string): Promise<QrCode | undefined> {
-    return Array.from(this.qrCodes.values()).find(
-      (qrCode) => qrCode.code === code
-    );
+    const [qrCode] = await db
+      .select()
+      .from(qrCodes)
+      .where(eq(qrCodes.code, code));
+    
+    return qrCode;
   }
   
   async validateQrCode(code: string): Promise<QrCode | undefined> {
@@ -230,4 +225,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Replace MemStorage with DatabaseStorage
+export const storage = new DatabaseStorage();
