@@ -225,6 +225,119 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Email verification routes
+  app.post("/api/email/send-verification", async (req, res) => {
+    if (!req.isAuthenticated()) return res.status(401).json({ message: "Unauthorized" });
+    
+    try {
+      const user = req.user!;
+      
+      // Generate a verification token
+      const token = await storage.createVerificationToken(user.id);
+      
+      // Send verification email
+      const emailSent = await sendVerificationEmail(
+        user.email,
+        user.displayName,
+        token
+      );
+      
+      if (emailSent) {
+        res.status(200).json({ message: "Verification email sent successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to send verification email" });
+      }
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+  
+  app.get("/api/email/verify", async (req, res) => {
+    try {
+      const { token } = req.query;
+      
+      if (!token || typeof token !== 'string') {
+        return res.status(400).json({ message: "Invalid token" });
+      }
+      
+      const verified = await storage.verifyEmail(token);
+      
+      if (verified) {
+        res.status(200).json({ message: "Email verified successfully" });
+      } else {
+        res.status(400).json({ message: "Invalid or expired verification token" });
+      }
+    } catch (error) {
+      console.error("Error verifying email:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+  
+  // Password reset routes
+  app.post("/api/password/forgot", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "Email is required" });
+      }
+      
+      // Create password reset token
+      const result = await storage.createPasswordResetToken(email);
+      
+      if (!result) {
+        // Don't reveal whether the email exists or not for security reasons
+        return res.status(200).json({ message: "If your email is registered, you will receive a password reset link" });
+      }
+      
+      // Send password reset email
+      const emailSent = await sendPasswordResetEmail(
+        result.user.email,
+        result.user.displayName,
+        result.token
+      );
+      
+      if (emailSent) {
+        res.status(200).json({ message: "Password reset email sent successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to send password reset email" });
+      }
+    } catch (error) {
+      console.error("Error sending password reset email:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+  
+  app.post("/api/password/reset", async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || typeof token !== 'string') {
+        return res.status(400).json({ message: "Invalid token" });
+      }
+      
+      if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters long" });
+      }
+      
+      // Hash the new password
+      const hashedPassword = await hashPassword(newPassword);
+      
+      // Reset the password
+      const success = await storage.resetPassword(token, hashedPassword);
+      
+      if (success) {
+        res.status(200).json({ message: "Password reset successfully" });
+      } else {
+        res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
