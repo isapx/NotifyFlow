@@ -1,8 +1,8 @@
-import { User, InsertUser, Connection, InsertConnection, Notification, InsertNotification, QrCode, users, connections, notifications, qrCodes } from "@shared/schema";
+import { User, InsertUser, Connection, InsertConnection, Notification, InsertNotification, QrCode, InsertQrCode, users, connections, notifications, qrCodes } from "@shared/schema";
 import { nanoid } from "nanoid";
 import { add } from "date-fns";
 import { db } from "./db";
-import { eq, and, or, desc } from "drizzle-orm";
+import { eq, and, or, desc, gt } from "drizzle-orm";
 import connectPg from "connect-pg-simple";
 import session from "express-session";
 import { pool } from "./db";
@@ -83,7 +83,7 @@ export class DatabaseStorage implements IStorage {
   async updateUser(id: number, userData: Partial<User>): Promise<User> {
     const [user] = await db
       .update(users)
-      .set({ ...userData, updatedAt: new Date() })
+      .set(userData)
       .where(eq(users.id, id))
       .returning();
     
@@ -95,8 +95,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createVerificationToken(userId: number): Promise<string> {
-    // Generate a random token
-    const token = crypto.randomBytes(32).toString('hex');
+    // Generate a random token using Node.js crypto
+    const token = nanoid(64); // Using nanoid instead of crypto.randomBytes
     const expires = add(new Date(), { hours: 24 }); // Token expires in 24 hours
     
     // Update the user with the verification token
@@ -142,8 +142,8 @@ export class DatabaseStorage implements IStorage {
       return undefined;
     }
     
-    // Generate a reset token
-    const token = crypto.randomBytes(32).toString('hex');
+    // Generate a reset token using nanoid
+    const token = nanoid(64);
     const expires = add(new Date(), { hours: 1 }); // Token expires in 1 hour
     
     // Update the user with the reset token

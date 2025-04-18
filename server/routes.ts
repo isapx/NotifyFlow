@@ -4,6 +4,8 @@ import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { z } from "zod";
 import { insertConnectionSchema, insertNotificationSchema } from "@shared/schema";
+import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
+import { hashPassword } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
