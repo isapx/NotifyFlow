@@ -76,17 +76,32 @@ export function QRCodeModal({ isOpen, onClose }: QRCodeModalProps) {
   
   // Download QR code
   const handleDownload = () => {
+    // Buscar primero la imagen, si no está disponible usar el canvas
+    const img = document.querySelector(".qr-code-image") as HTMLImageElement;
     const canvas = document.querySelector("canvas");
-    if (!canvas) return;
+    
+    let imageUrl = '';
+    if (img && img.src) {
+      imageUrl = img.src;
+    } else if (canvas) {
+      imageUrl = canvas.toDataURL("image/png");
+    } else {
+      toast({
+        title: "Error",
+        description: "No se pudo descargar el código QR. Inténtalo de nuevo.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     const link = document.createElement("a");
     link.download = "notifyflow-qrcode.png";
-    link.href = canvas.toDataURL("image/png");
+    link.href = imageUrl;
     link.click();
     
     toast({
-      title: "QR Code Downloaded",
-      description: "Your QR code has been downloaded successfully.",
+      title: "Código QR Descargado",
+      description: "Tu código QR se ha descargado correctamente.",
     });
   };
   
@@ -94,37 +109,53 @@ export function QRCodeModal({ isOpen, onClose }: QRCodeModalProps) {
   const handleShare = async () => {
     if (!navigator.share) {
       toast({
-        title: "Sharing Not Supported",
-        description: "Your browser doesn't support sharing. Please download and share manually.",
+        title: "Compartir no Compatible",
+        description: "Tu navegador no admite la función de compartir. Por favor, descarga y comparte manualmente.",
         variant: "destructive",
       });
       return;
     }
     
     try {
-      // Convert canvas to blob for sharing
+      // Usar la imagen o el canvas para compartir
+      const img = document.querySelector(".qr-code-image") as HTMLImageElement;
       const canvas = document.querySelector("canvas");
-      if (!canvas) return;
       
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => {
-          resolve(blob!);
-        }, "image/png");
-      });
+      let blob: Blob;
+      
+      if (img && img.src) {
+        // Convertir la imagen data URL a blob
+        const response = await fetch(img.src);
+        blob = await response.blob();
+      } else if (canvas) {
+        // Convertir canvas a blob
+        blob = await new Promise<Blob>((resolve) => {
+          canvas.toBlob((b) => {
+            if (b) resolve(b);
+            else throw new Error("No se pudo crear el blob");
+          }, "image/png");
+        });
+      } else {
+        throw new Error("No se encontró ninguna imagen de código QR");
+      }
       
       await navigator.share({
-        title: "NotifyFlow QR Code",
-        text: "Scan this QR code to connect with me",
+        title: "Código QR de NotifyFlow",
+        text: "Escanea este código QR para conectarte conmigo",
         files: [new File([blob], "notifyflow-qrcode.png", { type: "image/png" })],
       });
       
       toast({
-        title: "Shared",
-        description: "Your QR code has been shared successfully.",
+        title: "Compartido",
+        description: "Tu código QR se ha compartido correctamente.",
       });
     } catch (error) {
-      // User cancelled or sharing failed
-      console.error("Sharing failed:", error);
+      console.error("Error al compartir:", error);
+      toast({
+        title: "Error al Compartir",
+        description: "No se pudo compartir el código QR.",
+        variant: "destructive",
+      });
     }
   };
   
