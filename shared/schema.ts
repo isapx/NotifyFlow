@@ -13,6 +13,11 @@ export const users = pgTable("users", {
   displayName: text("display_name").notNull(),
   email: text("email").notNull().unique(),
   userType: userTypeEnum("user_type").notNull(),
+  emailVerified: boolean("email_verified").default(false).notNull(),
+  verificationToken: text("verification_token"),
+  verificationTokenExpires: timestamp("verification_token_expires"),
+  resetPasswordToken: text("reset_password_token"),
+  resetPasswordExpires: timestamp("reset_password_expires"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -50,6 +55,11 @@ export const qrCodes = pgTable("qr_codes", {
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
+  emailVerified: true,
+  verificationToken: true,
+  verificationTokenExpires: true,
+  resetPasswordToken: true,
+  resetPasswordExpires: true,
 });
 
 export const insertConnectionSchema = createInsertSchema(connections).omit({

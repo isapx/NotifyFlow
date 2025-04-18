@@ -13,7 +13,17 @@ export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, userData: Partial<User>): Promise<User>;
+  
+  // Email verification operations
+  createVerificationToken(userId: number): Promise<string>;
+  verifyEmail(token: string): Promise<boolean>;
+  
+  // Password reset operations
+  createPasswordResetToken(email: string): Promise<{ token: string, user: User } | undefined>;
+  resetPassword(token: string, newPassword: string): Promise<boolean>;
   
   // Connection operations
   createConnection(connection: InsertConnection): Promise<Connection>;
@@ -59,10 +69,116 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user;
   }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
   
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
+  }
+
+  async updateUser(id: number, userData: Partial<User>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ ...userData, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    return user;
+  }
+
+  async createVerificationToken(userId: number): Promise<string> {
+    // Generate a random token
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = add(new Date(), { hours: 24 }); // Token expires in 24 hours
+    
+    // Update the user with the verification token
+    await this.updateUser(userId, {
+      verificationToken: token,
+      verificationTokenExpires: expires
+    });
+    
+    return token;
+  }
+  
+  async verifyEmail(token: string): Promise<boolean> {
+    // Find user with this verification token
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(
+        and(
+          eq(users.verificationToken, token),
+          gt(users.verificationTokenExpires as any, new Date())
+        )
+      );
+    
+    if (!user) {
+      return false;
+    }
+    
+    // Mark email as verified and clear verification token
+    await this.updateUser(user.id, {
+      emailVerified: true,
+      verificationToken: null,
+      verificationTokenExpires: null
+    });
+    
+    return true;
+  }
+  
+  async createPasswordResetToken(email: string): Promise<{ token: string, user: User } | undefined> {
+    // Find user by email
+    const user = await this.getUserByEmail(email);
+    
+    if (!user) {
+      return undefined;
+    }
+    
+    // Generate a reset token
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = add(new Date(), { hours: 1 }); // Token expires in 1 hour
+    
+    // Update the user with the reset token
+    await this.updateUser(user.id, {
+      resetPasswordToken: token,
+      resetPasswordExpires: expires
+    });
+    
+    return { token, user };
+  }
+  
+  async resetPassword(token: string, newPassword: string): Promise<boolean> {
+    // Find user with this reset token
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(
+        and(
+          eq(users.resetPasswordToken, token),
+          gt(users.resetPasswordExpires as any, new Date())
+        )
+      );
+    
+    if (!user) {
+      return false;
+    }
+    
+    // Update password and clear reset token
+    await this.updateUser(user.id, {
+      password: newPassword, // Note: The password should be hashed before this!
+      resetPasswordToken: null,
+      resetPasswordExpires: null
+    });
+    
+    return true;
   }
   
   // Connection operations
