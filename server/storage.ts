@@ -81,7 +81,13 @@ export class MemStorage implements IStorage {
   async createConnection(insertConnection: InsertConnection): Promise<Connection> {
     const id = this.connectionCurrentId++;
     const createdAt = new Date();
-    const connection: Connection = { ...insertConnection, id, createdAt, closedAt: null };
+    const connection: Connection = { 
+      ...insertConnection, 
+      id, 
+      createdAt, 
+      closedAt: null,
+      status: insertConnection.status || "active" 
+    };
     this.connections.set(id, connection);
     return connection;
   }
@@ -130,7 +136,15 @@ export class MemStorage implements IStorage {
   async createNotification(insertNotification: InsertNotification): Promise<Notification> {
     const id = this.notificationCurrentId++;
     const createdAt = new Date();
-    const notification: Notification = { ...insertNotification, id, createdAt };
+    // Create a correctly typed notification object with default isRead value
+    const notification: Notification = { 
+      id, 
+      title: insertNotification.title,
+      message: insertNotification.message,
+      connectionId: insertNotification.connectionId,
+      createdAt, 
+      isRead: false 
+    };
     this.notifications.set(id, notification);
     return notification;
   }
@@ -150,9 +164,14 @@ export class MemStorage implements IStorage {
     const connectionIds = connections.map(connection => connection.id);
     
     // Then get all notifications for these connections
-    return Array.from(this.notifications.values()).filter(
-      (notification) => connectionIds.includes(notification.connectionId)
-    ).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()); // Sort newest first
+    return Array.from(this.notifications.values())
+      .filter(notification => connectionIds.includes(notification.connectionId))
+      .sort((a, b) => {
+        // Handle potentially null dates by defaulting to current time
+        const timeA = a.createdAt?.getTime() || Date.now();
+        const timeB = b.createdAt?.getTime() || Date.now();
+        return timeB - timeA; // Sort newest first
+      });
   }
   
   async markNotificationAsRead(id: number): Promise<Notification> {
