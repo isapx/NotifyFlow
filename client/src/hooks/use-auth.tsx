@@ -95,16 +95,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await apiRequest("POST", "/api/logout");
     },
     onSuccess: () => {
+      // Invalidar todas las consultas para forzar una recarga
+      queryClient.clear();
+      // Establecer explícitamente el usuario como null
       queryClient.setQueryData(["/api/user"], null);
-      navigate("/auth");
+      
+      // Mostrar toast y redirigir
       toast({
-        title: "Logged out",
-        description: "You have been logged out successfully.",
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión correctamente.",
       });
+      
+      // Asegurarnos que la redirección ocurra después del estado
+      setTimeout(() => {
+        navigate("/auth");
+      }, 100);
     },
     onError: (error: Error) => {
       toast({
-        title: "Logout failed",
+        title: "Error al cerrar sesión",
         description: error.message,
         variant: "destructive",
       });
