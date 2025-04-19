@@ -1,5 +1,5 @@
 
-import { useParams } from "react-router-dom";
+import { useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { AppNavbar } from "@/components/AppNavbar";
 import { MobileNavbar } from "@/components/MobileNavbar";
