@@ -9,6 +9,7 @@ import ProfilePage from "@/pages/profile-page";
 import { ProtectedRoute } from "./lib/protected-route";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./hooks/use-auth";
+import ConnectionDetailsPage from "@/pages/connection-details";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <ProtectedRoute path="/notifications" component={NotificationsPage} />
       <ProtectedRoute path="/profile" component={ProfilePage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/connections/:connectionId" component={ConnectionDetailsPage} /> {/* Added route */}
       <Route component={NotFound} />
     </Switch>
   );

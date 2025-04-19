@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom'; // Added import for useNavigate
 
 const BusinessIcons: Record<string, any> = {
   store: <Store className="h-5 w-5" />,
@@ -44,7 +45,8 @@ export default function HomePage() {
   const { toast } = useToast();
   const [showQRModal, setShowQRModal] = useState(false);
   const [showScannerModal, setShowScannerModal] = useState(false);
-  
+  const navigate = useNavigate(); // Added useNavigate hook
+
   // Fetch active connections
   const { 
     data: connections, 
@@ -52,7 +54,7 @@ export default function HomePage() {
   } = useQuery({
     queryKey: ["/api/connections/active"],
   });
-  
+
   // Fetch recent notifications
   const { 
     data: notifications, 
@@ -147,7 +149,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <AppNavbar />
-      
+
       <div className="pt-16 pb-16 md:pb-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Mobile Welcome Card */}
@@ -156,7 +158,7 @@ export default function HomePage() {
               <CardContent className="pt-6">
                 <h2 className="text-lg font-semibold mb-2">Welcome, {user?.displayName || "User"}!</h2>
                 <p className="text-gray-600 mb-4">What would you like to do today?</p>
-                
+
                 <div className="grid grid-cols-2 gap-4 mb-2">
                   {user?.userType === "customer" ? (
                     <Button 
@@ -177,7 +179,7 @@ export default function HomePage() {
                       <span className="text-sm font-medium">Scan QR</span>
                     </Button>
                   )}
-                  
+
                   <Button 
                     variant="outline" 
                     className="h-24 flex flex-col items-center justify-center gap-2"
@@ -189,7 +191,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
           )}
-          
+
           {/* Desktop View */}
           {!isMobile && (
             <div className="grid grid-cols-3 gap-6">
@@ -217,7 +219,7 @@ export default function HomePage() {
                         Scan QR Code
                       </Button>
                     )}
-                    
+
                     <Button 
                       variant="outline"
                       className="w-full flex items-center justify-center gap-2"
@@ -227,7 +229,7 @@ export default function HomePage() {
                     </Button>
                   </CardContent>
                 </Card>
-                
+
                 <Card>
                   <CardHeader>
                     <CardTitle>Your Statistics</CardTitle>
@@ -290,7 +292,7 @@ export default function HomePage() {
                       <div className="grid grid-cols-2 gap-4">
                         {activeConnections.map((connection: any) => {
                           const entity = getConnectionEntity(connection);
-                          
+
                           return (
                             <Card key={connection.id}>
                               <CardContent className="p-4">
@@ -314,7 +316,12 @@ export default function HomePage() {
                                       Connected {formatTime(connection.createdAt)}
                                     </p>
                                     <div className="mt-3 flex justify-between">
-                                      <Button variant="link" size="sm" className="h-auto p-0">
+                                      <Button 
+                                        variant="link" 
+                                        size="sm" 
+                                        className="h-auto p-0"
+                                        onClick={() => navigate(`/connections/${connection.id}`)}
+                                      >
                                         View Details
                                       </Button>
                                       <Button 
@@ -361,7 +368,7 @@ export default function HomePage() {
                     )}
                   </CardContent>
                 </Card>
-                
+
                 {/* Recent Notifications */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -414,7 +421,12 @@ export default function HomePage() {
                                       {getNotificationSource(notification)}
                                     </span>
                                     <div className="flex space-x-3">
-                                      <Button variant="link" size="sm" className="h-auto p-0">
+                                      <Button 
+                                        variant="link" 
+                                        size="sm" 
+                                        className="h-auto p-0"
+                                        onClick={() => navigate(`/connections/${notification.connection.id}`)}
+                                      >
                                         View Details
                                       </Button>
                                       {user?.userType === "business" ? (
@@ -474,7 +486,7 @@ export default function HomePage() {
               </div>
             </div>
           )}
-          
+
           {/* Mobile Active Connections */}
           {isMobile && (
             <div className="mb-6">
@@ -484,7 +496,7 @@ export default function HomePage() {
                   View All
                 </Button>
               </div>
-              
+
               {isLoadingConnections ? (
                 <div className="space-y-3">
                   {[1, 2].map((i) => (
@@ -507,7 +519,7 @@ export default function HomePage() {
                 <div className="space-y-3">
                   {activeConnections.map((connection: any) => {
                     const entity = getConnectionEntity(connection);
-                    
+
                     return (
                       <Card key={connection.id}>
                         <CardContent className="p-4">
@@ -528,7 +540,7 @@ export default function HomePage() {
                                 </p>
                               </div>
                             </div>
-                            
+
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -536,7 +548,7 @@ export default function HomePage() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Details</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate(`/connections/${connection.id}`)}>View Details</DropdownMenuItem>
                                 <DropdownMenuItem 
                                   className="text-red-500"
                                   onClick={() => handleCloseConnection(connection.id)}
@@ -568,7 +580,7 @@ export default function HomePage() {
               )}
             </div>
           )}
-          
+
           {/* Mobile Recent Notifications */}
           {isMobile && (
             <div>
@@ -578,7 +590,7 @@ export default function HomePage() {
                   View All
                 </Button>
               </div>
-              
+
               {isLoadingNotifications ? (
                 <div className="space-y-3">
                   {[1, 2].map((i) => (
@@ -655,15 +667,15 @@ export default function HomePage() {
           )}
         </div>
       </div>
-      
+
       <MobileNavbar />
-      
+
       {/* QR Code Modal */}
       <QRCodeModal 
         isOpen={showQRModal} 
         onClose={() => setShowQRModal(false)} 
       />
-      
+
       {/* QR Scanner Modal */}
       <QRScannerModal 
         isOpen={showScannerModal} 
