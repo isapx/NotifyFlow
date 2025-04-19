@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from 'react-router-dom'; // Added import for useNavigate
+import { useLocation } from 'wouter';
 
 const BusinessIcons: Record<string, any> = {
   store: <Store className="h-5 w-5" />,
@@ -45,7 +45,7 @@ export default function HomePage() {
   const { toast } = useToast();
   const [showQRModal, setShowQRModal] = useState(false);
   const [showScannerModal, setShowScannerModal] = useState(false);
-  const navigate = useNavigate(); // Added useNavigate hook
+  const [, navigate] = useLocation();
 
   // Fetch active connections
   const { 
