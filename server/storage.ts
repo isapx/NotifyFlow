@@ -1,11 +1,10 @@
 import { User, InsertUser, Connection, InsertConnection, Notification, InsertNotification, QrCode, InsertQrCode, users, connections, notifications, qrCodes } from "@shared/schema";
 import { nanoid } from "nanoid";
 import { add } from "date-fns";
-import { db } from "./db";
+import { db, pool } from "./db";
 import { eq, and, or, desc, gt } from "drizzle-orm";
 import connectPg from "connect-pg-simple";
 import session from "express-session";
-import { pool } from "./db";
 
 const PostgresSessionStore = connectPg(session);
 

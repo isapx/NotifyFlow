@@ -10,6 +10,8 @@ dotenv.config();
 
 // Determine if we're using a Neon database URL
 const isNeonDatabase = process.env.DATABASE_URL?.includes('.neon.tech');
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
+console.log('isNeonDatabase:', isNeonDatabase);
 
 // Configure Neon if needed
 if (isNeonDatabase) {
@@ -23,21 +25,15 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Create the appropriate pool based on the database URL
-let pool;
-let db;
+const pool = isNeonDatabase
+  ? new NeonPool({ connectionString: process.env.DATABASE_URL })
+  : new pg.Pool({ 
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : false
+    });
 
-if (isNeonDatabase) {
-  // Use Neon's serverless pool for Neon databases
-  pool = new NeonPool({ connectionString: process.env.DATABASE_URL });
-  db = drizzle(pool, { schema });
-} else {
-  // Use regular pg pool for local PostgreSQL
-  pool = new pg.Pool({ 
-    connectionString: process.env.DATABASE_URL,
-    // Add SSL configuration if needed
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : false
-  });
-  db = drizzlePg(pool, { schema });
-}
+const db = isNeonDatabase
+  ? drizzle(pool as NeonPool, { schema })
+  : drizzlePg(pool as pg.Pool, { schema });
 
 export { pool, db };
