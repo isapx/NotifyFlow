@@ -19,14 +19,14 @@ export function MobileNavbar() {
         <Link href="/">
           <button className={`flex flex-col items-center justify-center w-1/4 py-1 ${location === "/" ? "text-primary" : "text-gray-500"}`}>
             <Home className="h-5 w-5" />
-            <span className="text-xs mt-1">Home</span>
+            <span className="text-xs mt-1">Inicio</span>
           </button>
         </Link>
         
         <Link href="/history">
           <button className={`flex flex-col items-center justify-center w-1/4 py-1 ${location === "/history" ? "text-primary" : "text-gray-500"}`}>
             <History className="h-5 w-5" />
-            <span className="text-xs mt-1">History</span>
+            <span className="text-xs mt-1">Historial</span>
           </button>
         </Link>
         
@@ -38,14 +38,14 @@ export function MobileNavbar() {
                 {unreadCount}
               </Badge>
             )}
-            <span className="text-xs mt-1">Notifications</span>
+            <span className="text-xs mt-1">Notificaciones</span>
           </button>
         </Link>
         
         <Link href="/profile">
           <button className={`flex flex-col items-center justify-center w-1/4 py-1 ${location === "/profile" ? "text-primary" : "text-gray-500"}`}>
             <User className="h-5 w-5" />
-            <span className="text-xs mt-1">Profile</span>
+            <span className="text-xs mt-1">Perfil</span>
           </button>
         </Link>
       </nav>

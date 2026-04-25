@@ -156,8 +156,8 @@ export default function HomePage() {
           {isMobile && (
             <Card className="mb-6">
               <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-2">Welcome, {user?.displayName || "User"}!</h2>
-                <p className="text-gray-600 mb-4">What would you like to do today?</p>
+                <h2 className="text-lg font-semibold mb-2">¡Bienvenido, {user?.displayName || "Usuario"}!</h2>
+                <p className="text-gray-600 mb-4">¿Qué te gustaría hacer hoy?</p>
 
                 <div className="grid grid-cols-2 gap-4 mb-2">
                   {user?.userType === "customer" ? (
@@ -167,7 +167,7 @@ export default function HomePage() {
                       onClick={() => setShowQRModal(true)}
                     >
                       <QrCode className="h-6 w-6 text-primary" />
-                      <span className="text-sm font-medium">Generate QR</span>
+                      <span className="text-sm font-medium">Generar QR</span>
                     </Button>
                   ) : (
                     <Button 
@@ -176,7 +176,7 @@ export default function HomePage() {
                       onClick={() => setShowScannerModal(true)}
                     >
                       <ScanLine className="h-6 w-6 text-primary" />
-                      <span className="text-sm font-medium">Scan QR</span>
+                      <span className="text-sm font-medium">Escanear QR</span>
                     </Button>
                   )}
 
@@ -185,7 +185,7 @@ export default function HomePage() {
                     className="h-24 flex flex-col items-center justify-center gap-2"
                   >
                     <Bell className="h-6 w-6 text-primary" />
-                    <span className="text-sm font-medium">Notifications</span>
+                    <span className="text-sm font-medium">Notificaciones</span>
                   </Button>
                 </div>
               </CardContent>
@@ -199,8 +199,8 @@ export default function HomePage() {
               <div className="col-span-1">
                 <Card className="mb-6">
                   <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
-                  </CardHeader>
+                      <CardTitle>Acciones rápidas</CardTitle>
+                    </CardHeader>
                   <CardContent className="space-y-3">
                     {user?.userType === "customer" ? (
                       <Button 
@@ -208,7 +208,7 @@ export default function HomePage() {
                         onClick={() => setShowQRModal(true)}
                       >
                         <QrCode className="h-4 w-4" />
-                        Generate QR Code
+                        Generar código QR
                       </Button>
                     ) : (
                       <Button 
@@ -216,7 +216,7 @@ export default function HomePage() {
                         onClick={() => setShowScannerModal(true)}
                       >
                         <ScanLine className="h-4 w-4" />
-                        Scan QR Code
+                        Escanear código QR
                       </Button>
                     )}
 
@@ -225,35 +225,35 @@ export default function HomePage() {
                       className="w-full flex items-center justify-center gap-2"
                     >
                       <Bell className="h-4 w-4" />
-                      Manage Notifications
+                      Administrar notificaciones
                     </Button>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Your Statistics</CardTitle>
+                    <CardTitle>Tus estadísticas</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Active Connections</span>
+                      <span className="text-gray-600">Conexiones activas</span>
                       <span className="font-medium">{activeConnections.length}</span>
                     </div>
                     <div className="h-px bg-gray-200"></div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Notifications This Month</span>
+                      <span className="text-gray-600">Notificaciones este mes</span>
                       <span className="font-medium">{notifications?.length || 0}</span>
                     </div>
                     <div className="h-px bg-gray-200"></div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">
-                        {user?.userType === 'customer' ? 'QR Codes Generated' : 'QR Codes Scanned'}
+                        {user?.userType === 'customer' ? 'Códigos QR generados' : 'Códigos QR escaneados'}
                       </span>
                       <span className="font-medium">0</span>
                     </div>
                     <div className="h-px bg-gray-200"></div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Completed Services</span>
+                      <span className="text-gray-600">Servicios completados</span>
                       <span className="font-medium">0</span>
                     </div>
                   </CardContent>
@@ -265,9 +265,9 @@ export default function HomePage() {
                 {/* Active Connections */}
                 <Card className="mb-6">
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle>Active Connections</CardTitle>
+                    <CardTitle>Conexiones Activas</CardTitle>
                     <Button variant="link" size="sm" className="text-sm">
-                      Manage All
+                      Administrar Todas
                     </Button>
                   </CardHeader>
                   <CardContent>
@@ -307,13 +307,13 @@ export default function HomePage() {
                                   <div className="flex-1">
                                     <div className="flex justify-between items-center">
                                       <h3 className="font-medium">{entity?.displayName}</h3>
-                                      <span className="text-xs px-2 py-1 bg-green-100 text-green-600 rounded-full">Active</span>
+                                      <span className="text-xs px-2 py-1 bg-green-100 text-green-600 rounded-full">Activa</span>
                                     </div>
                                     <p className="text-sm text-gray-500 mt-1">
                                       {connection.serviceName}
                                     </p>
                                     <p className="text-xs text-gray-400 mt-1">
-                                      Connected {formatTime(connection.createdAt)}
+                                      Conectado {formatTime(connection.createdAt)}
                                     </p>
                                     <div className="mt-3 flex justify-between">
                                       <Button 
@@ -322,7 +322,7 @@ export default function HomePage() {
                                         className="h-auto p-0"
                                         onClick={() => navigate(`/connections/${connection.id}`)}
                                       >
-                                        View Details
+                                        Ver Detalles
                                       </Button>
                                       <Button 
                                         variant="link" 
@@ -330,7 +330,7 @@ export default function HomePage() {
                                         className="h-auto p-0 text-red-500"
                                         onClick={() => handleCloseConnection(connection.id)}
                                       >
-                                        Close
+                                        Cerrar
                                       </Button>
                                     </div>
                                   </div>
@@ -345,7 +345,7 @@ export default function HomePage() {
                         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
                           <AlertCircle className="h-6 w-6 text-gray-500" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900">No Active Connections</h3>
+                        <h3 className="text-lg font-medium text-gray-900">Sin Conexiones Activas</h3>
                         <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
                           {user?.userType === 'customer' 
                             ? 'Generate a QR code and share it with a business to start a connection.'
@@ -355,12 +355,12 @@ export default function HomePage() {
                           {user?.userType === "customer" ? (
                             <Button onClick={() => setShowQRModal(true)}>
                               <QrCode className="mr-2 h-4 w-4" />
-                              Generate QR Code
+                              Generar Codigo QR
                             </Button>
                           ) : (
                             <Button onClick={() => setShowScannerModal(true)}>
                               <ScanLine className="mr-2 h-4 w-4" />
-                              Scan QR Code
+                              Escanear Codigo QR
                             </Button>
                           )}
                         </div>
@@ -372,9 +372,9 @@ export default function HomePage() {
                 {/* Recent Notifications */}
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle>Recent Notifications</CardTitle>
+                    <CardTitle>Notificaciones Recientes</CardTitle>
                     <Button variant="link" size="sm" className="text-sm">
-                      View All
+                      Ver Todo
                     </Button>
                   </CardHeader>
                   <CardContent>
@@ -427,7 +427,7 @@ export default function HomePage() {
                                         className="h-auto p-0"
                                         onClick={() => navigate(`/connections/${notification.connection.id}`)}
                                       >
-                                        View Details
+                                        Ver Detalles
                                       </Button>
                                       {user?.userType === "business" ? (
                                         <Button 
@@ -436,7 +436,7 @@ export default function HomePage() {
                                           className="h-auto p-0 text-red-500"
                                           onClick={() => handleCloseConnection(notification.connection.id)}
                                         >
-                                          Close Connection
+                                          Cerrar Conexion
                                         </Button>
                                       ) : (
                                         <>
@@ -447,7 +447,7 @@ export default function HomePage() {
                                               className="h-auto p-0"
                                               onClick={() => markAsReadMutation.mutate(notification.id)}
                                             >
-                                              Mark as Read
+                                              Marcar como Leido
                                             </Button>
                                           )}
                                           <Button 
@@ -456,7 +456,7 @@ export default function HomePage() {
                                             className="h-auto p-0 text-red-500"
                                             onClick={() => handleCloseConnection(notification.connection.id)}
                                           >
-                                            Close Connection
+                                            Cerrar Conexion
                                           </Button>
                                         </>
                                       )}
@@ -473,7 +473,7 @@ export default function HomePage() {
                         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
                           <Bell className="h-6 w-6 text-gray-500" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900">No Notifications</h3>
+                        <h3 className="text-lg font-medium text-gray-900">Sin Notificaciones</h3>
                         <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
                           {user?.userType === 'customer' 
                             ? 'You haven\'t received any notifications yet. Connect with businesses to get updates.'
@@ -491,9 +491,9 @@ export default function HomePage() {
           {isMobile && (
             <div className="mb-6">
               <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-semibold">Active Connections</h2>
+                <h2 className="text-lg font-semibold">Conexiones Activas</h2>
                 <Button variant="link" size="sm" className="text-sm p-0">
-                  View All
+                  Ver Todo
                 </Button>
               </div>
 
@@ -536,7 +536,7 @@ export default function HomePage() {
                                 <h3 className="font-medium">{entity?.displayName}</h3>
                                 <p className="text-sm text-gray-500">{connection.serviceName}</p>
                                 <p className="text-xs text-gray-400 mt-1">
-                                  Connected {formatTime(connection.createdAt)}
+                                  Conectado {formatTime(connection.createdAt)}
                                 </p>
                               </div>
                             </div>
@@ -548,12 +548,12 @@ export default function HomePage() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => navigate(`/connections/${connection.id}`)}>View Details</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate(`/connections/${connection.id}`)}>Ver Datalles</DropdownMenuItem>
                                 <DropdownMenuItem 
                                   className="text-red-500"
                                   onClick={() => handleCloseConnection(connection.id)}
                                 >
-                                  Close Connection
+                                  Cerrar Conexion
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -569,7 +569,7 @@ export default function HomePage() {
                     <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
                       <AlertCircle className="h-6 w-6 text-gray-500" />
                     </div>
-                    <h3 className="text-base font-medium text-gray-900">No Active Connections</h3>
+                    <h3 className="text-base font-medium text-gray-900">Sin Conexiones Activas</h3>
                     <p className="mt-2 text-sm text-gray-500">
                       {user?.userType === 'customer' 
                         ? 'Generate a QR code to connect with businesses.'
@@ -585,7 +585,7 @@ export default function HomePage() {
           {isMobile && (
             <div>
               <div className="flex justify-between items-center mb-3">
-                <h2 className="text-lg font-semibold">Recent Notifications</h2>
+                <h2 className="text-lg font-semibold">Notificaciones Recientes</h2>
                 <Button variant="link" size="sm" className="text-sm p-0">
                   View All
                 </Button>
@@ -654,7 +654,7 @@ export default function HomePage() {
                     <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
                       <Bell className="h-6 w-6 text-gray-500" />
                     </div>
-                    <h3 className="text-base font-medium text-gray-900">No Notifications</h3>
+                    <h3 className="text-base font-medium text-gray-900">Sin Notificaciones</h3>
                     <p className="mt-2 text-sm text-gray-500">
                       {user?.userType === 'customer' 
                         ? 'Connect with businesses to receive notifications.'

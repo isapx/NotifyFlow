@@ -92,7 +92,7 @@ export default function ProfilePage() {
                   <CardTitle className="text-center">{user?.displayName}</CardTitle>
                   <CardDescription className="text-center">
                     <Badge className="mt-1">
-                      {user?.userType === "business" ? "Business" : "Customer"}
+                      {user?.userType === "business" ? "Negocio" : "Cliente"}
                     </Badge>
                   </CardDescription>
                 </CardHeader>
@@ -114,14 +114,14 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Store className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm">Active Connections</span>
+                        <span className="text-sm">Conexiones activas</span>
                       </div>
                       <Badge variant="outline">{activeConnectionsCount}</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <Bell className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm">Notifications</span>
+                        <span className="text-sm">Notificaciones</span>
                       </div>
                       <Badge variant="outline">{notificationsCount}</Badge>
                     </div>
@@ -129,7 +129,7 @@ export default function ProfilePage() {
                       <div className="flex items-center">
                         <QrCode className="h-4 w-4 text-gray-500 mr-2" />
                         <span className="text-sm">
-                          {user?.userType === "customer" ? "QR Codes Generated" : "QR Codes Scanned"}
+                          {user?.userType === "customer" ? "Códigos QR generados" : "Códigos QR escaneados"}
                         </span>
                       </div>
                       <Badge variant="outline">0</Badge>
@@ -143,7 +143,7 @@ export default function ProfilePage() {
                       onClick={() => setShowQRModal(true)}
                     >
                       <QrCode className="mr-2 h-4 w-4" />
-                      Generate QR Code
+                      Generar código QR
                     </Button>
                   )}
                 </CardFooter>
@@ -154,72 +154,72 @@ export default function ProfilePage() {
             <div className="md:col-span-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Account Settings</CardTitle>
+                  <CardTitle>Configuración de la cuenta</CardTitle>
                   <CardDescription>
-                    Manage your account settings and preferences
+                    Administra la configuración y preferencias de tu cuenta
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="space-y-4">
-                    <h3 className="font-medium">General Settings</h3>
+                    <h3 className="font-medium">Configuración general</h3>
                     
                     <div className="flex justify-between items-center py-2 border-b">
                       <div className="flex items-center">
                         <CircleUser className="h-5 w-5 text-gray-500 mr-3" />
                         <div>
-                          <h4 className="text-sm font-medium">Profile Information</h4>
-                          <p className="text-xs text-gray-500">Update your profile details</p>
+                          <h4 className="text-sm font-medium">Información del perfil</h4>
+                          <p className="text-xs text-gray-500">Actualiza los datos de tu perfil</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm">Edit</Button>
+                      <Button variant="ghost" size="sm">Editar</Button>
                     </div>
                     
                     <div className="flex justify-between items-center py-2 border-b">
                       <div className="flex items-center">
                         <Settings className="h-5 w-5 text-gray-500 mr-3" />
                         <div>
-                          <h4 className="text-sm font-medium">Account Settings</h4>
-                          <p className="text-xs text-gray-500">Manage your account preferences</p>
+                          <h4 className="text-sm font-medium">Configuración de la cuenta</h4>
+                          <p className="text-xs text-gray-500">Administra las preferencias de tu cuenta</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm">Manage</Button>
+                      <Button variant="ghost" size="sm">Administrar</Button>
                     </div>
                     
                     <div className="flex justify-between items-center py-2 border-b">
                       <div className="flex items-center">
                         <Bell className="h-5 w-5 text-gray-500 mr-3" />
                         <div>
-                          <h4 className="text-sm font-medium">Notification Preferences</h4>
-                          <p className="text-xs text-gray-500">Control how you receive notifications</p>
+                          <h4 className="text-sm font-medium">Preferencias de notificación</h4>
+                          <p className="text-xs text-gray-500">Controla cómo recibes las notificaciones</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm">Configure</Button>
+                      <Button variant="ghost" size="sm">Configurar</Button>
                     </div>
                   </div>
                   
                   <div className="space-y-4">
-                    <h3 className="font-medium">Help & Support</h3>
+                    <h3 className="font-medium">Ayuda y soporte</h3>
                     
                     <div className="flex justify-between items-center py-2 border-b">
                       <div className="flex items-center">
                         <HelpCircle className="h-5 w-5 text-gray-500 mr-3" />
                         <div>
-                          <h4 className="text-sm font-medium">Help Center</h4>
-                          <p className="text-xs text-gray-500">Get help using NotifyFlow</p>
+                          <h4 className="text-sm font-medium">Centro de ayuda</h4>
+                          <p className="text-xs text-gray-500">Obtén ayuda para usar NotificApp</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm">Visit</Button>
+                      <Button variant="ghost" size="sm">Visitar</Button>
                     </div>
                     
                     <div className="flex justify-between items-center py-2 border-b">
                       <div className="flex items-center">
                         <Smartphone className="h-5 w-5 text-gray-500 mr-3" />
                         <div>
-                          <h4 className="text-sm font-medium">Download Mobile App</h4>
-                          <p className="text-xs text-gray-500">Get NotifyFlow on your mobile device</p>
+                          <h4 className="text-sm font-medium">Descargar app móvil</h4>
+                          <p className="text-xs text-gray-500">Obtén NotificApp en tu dispositivo móvil</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm">Download</Button>
+                      <Button variant="ghost" size="sm">Descargar</Button>
                     </div>
                   </div>
                   
@@ -230,7 +230,7 @@ export default function ProfilePage() {
                       onClick={handleLogout}
                     >
                       <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
+                      Cerrar sesión
                     </Button>
                   </div>
                 </CardContent>
@@ -238,30 +238,29 @@ export default function ProfilePage() {
               
               <Card className="mt-6">
                 <CardHeader>
-                  <CardTitle>About NotifyFlow</CardTitle>
+                  <CardTitle>Acerca de NotificApp</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600">
-                    NotifyFlow creates a private communication channel between businesses and customers using QR codes. 
-                    No need to share phone numbers or emails.
+                    NotificApp es una plataforma que permite la comunicación privada entre empresas y clientes mediante códigos QR. No es necesario compartir números de teléfono ni correos electrónicos.
                   </p>
                   <div className="mt-4 grid grid-cols-2 gap-4">
                     <div className="bg-gray-50 p-3 rounded-lg">
-                      <h4 className="text-sm font-medium">Privacy Focused</h4>
+                      <h4 className="text-sm font-medium">Enfoque en la privacidad</h4>
                       <p className="text-xs text-gray-500 mt-1">
-                        Connect without sharing your personal contact details
+                        Conéctate sin compartir tus datos de contacto personales
                       </p>
                     </div>
                     <div className="bg-gray-50 p-3 rounded-lg">
-                      <h4 className="text-sm font-medium">Real-time Updates</h4>
+                      <h4 className="text-sm font-medium">Actualizaciones en tiempo real</h4>
                       <p className="text-xs text-gray-500 mt-1">
-                        Get instant notifications when services are ready
+                        Recibe notificaciones instantáneas cuando los servicios estén listos
                       </p>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="text-xs text-gray-500">
-                  Version 1.0.0 • Terms & Privacy
+                  Versión 1.0.0 • Términos y privacidad
                 </CardFooter>
               </Card>
             </div>

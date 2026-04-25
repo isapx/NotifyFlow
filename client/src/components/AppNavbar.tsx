@@ -47,7 +47,7 @@ export function AppNavbar() {
                 <div className="bg-primary text-white h-10 w-10 rounded-full flex items-center justify-center">
                   <Bell className="h-5 w-5" />
                 </div>
-                <span className="ml-2 text-xl font-semibold text-gray-800">NotifyFlow</span>
+                <span className="ml-2 text-xl font-semibold text-gray-800">NotificApp</span>
               </div>
             </Link>
           </div>
@@ -60,7 +60,7 @@ export function AppNavbar() {
                 size="sm"
               >
                 <Home className="h-4 w-4" />
-                <span className="hidden sm:inline">Home</span>
+                <span className="hidden sm:inline">Inicio</span>
               </Button>
             </Link>
             
@@ -71,7 +71,7 @@ export function AppNavbar() {
                 size="sm"
               >
                 <History className="h-4 w-4" />
-                <span className="hidden sm:inline">History</span>
+                <span className="hidden sm:inline">Historial</span>
               </Button>
             </Link>
             
@@ -82,7 +82,7 @@ export function AppNavbar() {
                 size="sm"
               >
                 <Bell className="h-4 w-4" />
-                <span className="hidden sm:inline">Notifications</span>
+                <span className="hidden sm:inline">Notificaciones</span>
                 {unreadCount > 0 && (
                   <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
                     {unreadCount}
@@ -103,17 +103,17 @@ export function AppNavbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <Link href="/profile">
                     <DropdownMenuItem className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
+                      <span>Perfil</span>
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    <span>Cerrar sesión</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -95,7 +95,7 @@ export function QRCodeModal({ isOpen, onClose }: QRCodeModalProps) {
     }
     
     const link = document.createElement("a");
-    link.download = "notifyflow-qrcode.png";
+    link.download = "notificapp-qrcode.png";
     link.href = imageUrl;
     link.click();
     
@@ -140,9 +140,9 @@ export function QRCodeModal({ isOpen, onClose }: QRCodeModalProps) {
       }
       
       await navigator.share({
-        title: "Código QR de NotifyFlow",
+        title: "Código QR de NotificApp",
         text: "Escanea este código QR para conectarte conmigo",
-        files: [new File([blob], "notifyflow-qrcode.png", { type: "image/png" })],
+        files: [new File([blob], "notificapp-qrcode.png", { type: "image/png" })],
       });
       
       toast({

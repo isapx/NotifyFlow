@@ -104,7 +104,7 @@ export function QRScannerModal({ isOpen, onClose }: QRScannerModalProps) {
       <Dialog open={isOpen} onOpenChange={(open) => !open && resetAndClose()}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center">Scan QR Code</DialogTitle>
+            <DialogTitle className="text-center">Scanear Codigo QR</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center py-4">
             <QrScanner 
@@ -113,7 +113,7 @@ export function QRScannerModal({ isOpen, onClose }: QRScannerModalProps) {
               width={320}
               height={320}
             />
-            <p className="mt-4 text-gray-600">Point your camera at a customer's QR code</p>
+            <p className="mt-4 text-gray-600">Apunte su cámara al código QR del cliente</p>
           </div>
         </DialogContent>
       </Dialog>
@@ -121,17 +121,17 @@ export function QRScannerModal({ isOpen, onClose }: QRScannerModalProps) {
       <AlertDialog open={showServiceDialog} onOpenChange={setShowServiceDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Enter Service Details</AlertDialogTitle>
+            <AlertDialogTitle>Escriba el nombre del servicio</AlertDialogTitle>
             <AlertDialogDescription>
-              Please provide a name for the service or product you are providing to the customer.
+              Por favor, ingrese el nombre del servicio para esta conexión (e.g., Reparación de Autos, Entrega de Flores). Esto ayudará a identificar la conexión en el futuro.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="serviceName">Service Name</Label>
+              <Label htmlFor="serviceName">Nombre del Servicio</Label>
               <Input
                 id="serviceName"
-                placeholder="e.g., Car Repair, Flower Delivery"
+                placeholder="e.g., Reparación de Autos, Entrega de Flores"
                 value={serviceName}
                 onChange={(e) => setServiceName(e.target.value)}
               />
@@ -145,7 +145,7 @@ export function QRScannerModal({ isOpen, onClose }: QRScannerModalProps) {
               onClick={handleCreateConnection}
               disabled={createConnectionMutation.isPending || !serviceName.trim()}
             >
-              {createConnectionMutation.isPending ? "Creating..." : "Create Connection"}
+              {createConnectionMutation.isPending ? "Creando..." : "Crear Conexión"}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

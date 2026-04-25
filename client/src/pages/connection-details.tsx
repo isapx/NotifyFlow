@@ -41,11 +41,11 @@ export default function ConnectionDetailsPage() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   if (!connection) {
-    return <div>Connection not found</div>;
+    return <div>Conexión no encontrada</div>;
   }
 
   const entity = getConnectionEntity(connection);
@@ -58,7 +58,7 @@ export default function ConnectionDetailsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Card>
             <CardHeader>
-              <CardTitle>Connection Details</CardTitle>
+                <CardTitle>Detalles de la conexión</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center gap-4">
@@ -77,19 +77,19 @@ export default function ConnectionDetailsPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <div className="text-sm text-gray-500">Status</div>
+                  <div className="text-sm text-gray-500">Estado</div>
                   <Badge variant={connection.status === "active" ? "success" : "secondary"}>
-                    {connection.status === "active" ? "Active" : "Closed"}
+                    {connection.status === "active" ? "Activa" : "Cerrada"}
                   </Badge>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-sm text-gray-500">Connection Type</div>
-                  <div>{entity?.userType === "business" ? "Business" : "Customer"}</div>
+                  <div className="text-sm text-gray-500">Tipo de conexión</div>
+                  <div>{entity?.userType === "business" ? "Negocio" : "Cliente"}</div>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-sm text-gray-500">Created</div>
+                  <div className="text-sm text-gray-500">Creado</div>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span>{formatDate(connection.createdAt)}</span>
@@ -103,7 +103,7 @@ export default function ConnectionDetailsPage() {
 
                 {connection.closedAt && (
                   <div className="space-y-2">
-                    <div className="text-sm text-gray-500">Closed</div>
+                    <div className="text-sm text-gray-500">Cerrado</div>
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-gray-400" />
                       <span>{formatDate(connection.closedAt)}</span>

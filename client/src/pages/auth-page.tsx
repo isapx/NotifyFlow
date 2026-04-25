@@ -85,10 +85,10 @@ export default function AuthPage() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          NotifyFlow
+          NotificApp
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Connect businesses with customers without sharing contact info
+          Conecta negocios con clientes sin compartir información de contacto
         </p>
       </div>
 
@@ -98,17 +98,17 @@ export default function AuthPage() {
             {/* Form Column */}
             <div>
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="login">Login</TabsTrigger>
-                  <TabsTrigger value="register">Register</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="login">Iniciar sesión</TabsTrigger>
+                  <TabsTrigger value="register">Registrarse</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="login">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Login to your account</CardTitle>
+                      <CardTitle>Inicia sesión en tu cuenta</CardTitle>
                       <CardDescription>
-                        Enter your credentials to access your account
+                        Ingresa tus credenciales para acceder
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -119,9 +119,9 @@ export default function AuthPage() {
                             name="username"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Username</FormLabel>
+                                <FormLabel>Usuario</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="johndoe" autoComplete="username" {...field} />
+                                    <Input placeholder="johndoe" autoComplete="username" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -132,7 +132,7 @@ export default function AuthPage() {
                             name="password"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>Contraseña</FormLabel>
                                 <FormControl>
                                   <Input type="password" autoComplete="current-password" {...field} />
                                 </FormControl>
@@ -145,18 +145,18 @@ export default function AuthPage() {
                             className="w-full"
                             disabled={loginMutation.isPending}
                           >
-                            {loginMutation.isPending ? (
+                                {loginMutation.isPending ? (
                               <div className="flex items-center justify-center">
                                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Logging in...
+                                Iniciando sesión...
                               </div>
                             ) : (
                               <div className="flex items-center justify-center">
                                 <LogIn className="mr-2 h-4 w-4" />
-                                Login
+                                Iniciar sesión
                               </div>
                             )}
                           </Button>
@@ -168,7 +168,7 @@ export default function AuthPage() {
                         variant="link"
                         onClick={() => setActiveTab('register')}
                       >
-                        Don't have an account? Register
+                        ¿No tienes una cuenta? Regístrate
                       </Button>
                     </CardFooter>
                   </Card>
@@ -177,9 +177,9 @@ export default function AuthPage() {
                 <TabsContent value="register">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Create an account</CardTitle>
+                      <CardTitle>Crea una cuenta</CardTitle>
                       <CardDescription>
-                        Join NotifyFlow and start connecting
+                        Únete a NotificApp y comienza a conectar
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -190,9 +190,9 @@ export default function AuthPage() {
                             name="displayName"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Display Name</FormLabel>
+                                <FormLabel>Nombre para mostrar</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="John Doe" {...field} />
+                                  <Input placeholder="Juan Pérez" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -204,7 +204,7 @@ export default function AuthPage() {
                               name="username"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Username</FormLabel>
+                                  <FormLabel>Usuario</FormLabel>
                                   <FormControl>
                                     <Input placeholder="johndoe" autoComplete="username" {...field} />
                                   </FormControl>
@@ -217,9 +217,9 @@ export default function AuthPage() {
                               name="email"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Email</FormLabel>
+                                  <FormLabel>Correo electrónico</FormLabel>
                                   <FormControl>
-                                    <Input type="email" placeholder="john.doe@example.com" {...field} />
+                                    <Input type="email" placeholder="juan.perez@ejemplo.com" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -231,7 +231,7 @@ export default function AuthPage() {
                             name="password"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Password</FormLabel>
+                                <FormLabel>Contraseña</FormLabel>
                                 <FormControl>
                                   <Input type="password" autoComplete="new-password" {...field} />
                                 </FormControl>
@@ -244,7 +244,7 @@ export default function AuthPage() {
                             name="userType"
                             render={({ field }) => (
                               <FormItem className="space-y-3">
-                                <FormLabel>Account Type</FormLabel>
+                                <FormLabel>Tipo de cuenta</FormLabel>
                                 <FormControl>
                                   <RadioGroup
                                     onValueChange={field.onChange}
@@ -255,8 +255,8 @@ export default function AuthPage() {
                                       <FormControl>
                                         <RadioGroupItem value="customer" />
                                       </FormControl>
-                                      <FormLabel className="font-normal">
-                                        Customer (I want to receive notifications)
+                                        <FormLabel className="font-normal">
+                                        Cliente (Quiero recibir notificaciones)
                                       </FormLabel>
                                     </FormItem>
                                     <FormItem className="flex items-center space-x-3 space-y-0">
@@ -264,7 +264,7 @@ export default function AuthPage() {
                                         <RadioGroupItem value="business" />
                                       </FormControl>
                                       <FormLabel className="font-normal">
-                                        Business (I want to send notifications)
+                                        Negocio (Quiero enviar notificaciones)
                                       </FormLabel>
                                     </FormItem>
                                   </RadioGroup>
@@ -278,18 +278,18 @@ export default function AuthPage() {
                             className="w-full"
                             disabled={registerMutation.isPending}
                           >
-                            {registerMutation.isPending ? (
+                                {registerMutation.isPending ? (
                               <div className="flex items-center justify-center">
                                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Creating Account...
+                                Creando cuenta...
                               </div>
                             ) : (
                               <div className="flex items-center justify-center">
                                 <UserPlus className="mr-2 h-4 w-4" />
-                                Register
+                                Registrarse
                               </div>
                             )}
                           </Button>
@@ -301,7 +301,7 @@ export default function AuthPage() {
                         variant="link"
                         onClick={() => setActiveTab('login')}
                       >
-                        Already have an account? Login
+                        ¿Ya tienes una cuenta? Inicia sesión
                       </Button>
                     </CardFooter>
                   </Card>
@@ -310,12 +310,12 @@ export default function AuthPage() {
             </div>
 
             {/* Hero Column */}
-            <div className="hidden md:block bg-gradient-to-br from-primary to-primary-dark text-white rounded-lg p-8">
+                  <div className="hidden md:block bg-gradient-to-br from-primary to-primary-dark text-white rounded-lg p-8">
               <div className="h-full flex flex-col justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold mb-4">Connect Without Sharing Personal Info</h3>
+                  <h3 className="text-2xl font-bold mb-4">Conecta sin compartir información personal</h3>
                   <p className="mb-6">
-                    NotifyFlow creates a private communication channel between businesses and customers using QR codes. No need to share phone numbers or emails.
+                    NotificApp crea un canal de comunicación privado entre negocios y clientes usando códigos QR. No es necesario compartir números telefónicos ni correos.
                   </p>
                 </div>
 
@@ -327,8 +327,8 @@ export default function AuthPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-semibold">Privacy Focused</h4>
-                      <p className="text-sm opacity-80">Connect with businesses without sharing your personal contact details</p>
+                      <h4 className="font-semibold">Enfocado en la privacidad</h4>
+                      <p className="text-sm opacity-80">Conéctate con negocios sin compartir tus datos de contacto</p>
                     </div>
                   </div>
 
@@ -339,8 +339,8 @@ export default function AuthPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-semibold">Real-time Notifications</h4>
-                      <p className="text-sm opacity-80">Get instant updates when your order or service is ready</p>
+                      <h4 className="font-semibold">Notificaciones en tiempo real</h4>
+                      <p className="text-sm opacity-80">Recibe actualizaciones instantáneas cuando tu pedido o servicio esté listo</p>
                     </div>
                   </div>
 
@@ -351,8 +351,8 @@ export default function AuthPage() {
                       </svg>
                     </div>
                     <div>
-                      <h4 className="font-semibold">Temporary Connections</h4>
-                      <p className="text-sm opacity-80">Connections close automatically after service completion</p>
+                      <h4 className="font-semibold">Conexiones temporales</h4>
+                      <p className="text-sm opacity-80">Las conexiones se cierran automáticamente al finalizar el servicio</p>
                     </div>
                   </div>
                 </div>

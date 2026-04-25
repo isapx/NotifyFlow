@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Mostrar notificación de registro exitoso
       toast({
         title: "Registro exitoso",
-        description: `Bienvenido a NotifyFlow, ${user.displayName}!`,
+        description: `Bienvenido a NotificApp, ${user.displayName}!`,
       });
       
       console.log("Redirigiendo al usuario a /");

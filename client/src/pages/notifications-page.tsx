@@ -98,8 +98,8 @@ export default function NotificationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
       toast({
-        title: "Notification Sent",
-        description: "Your notification has been sent successfully.",
+        title: "Notificación enviada",
+        description: "Su notificación ha sido enviada exitosamente.",
       });
       form.reset();
       setShowNewNotificationDialog(false);
@@ -107,7 +107,7 @@ export default function NotificationsPage() {
     onError: (error) => {
       toast({
         title: "Error",
-        description: error.message || "Failed to send notification. Please try again.",
+        description: error.message || "Error al enviar la notificación. Por favor, inténtelo de nuevo.",
         variant: "destructive",
       });
     },
@@ -122,14 +122,14 @@ export default function NotificationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
       toast({
-        title: "Marked as Read",
-        description: "Notification marked as read.",
+        title: "Marcada como leída",
+        description: "Notificación marcada como leída.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: error.message || "Failed to mark notification as read.",
+        description: error.message || "Error al marcar la notificación como leída.",
         variant: "destructive",
       });
     },
@@ -145,14 +145,14 @@ export default function NotificationsPage() {
       queryClient.invalidateQueries({ queryKey: ["/api/connections/active"] });
       queryClient.invalidateQueries({ queryKey: ["/api/notifications"] });
       toast({
-        title: "Connection Closed",
-        description: "The connection has been closed successfully.",
+        title: "Conexión Cerrada",
+        description: "La conexión ha sido cerrada exitosamente.",
       });
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: error.message || "Failed to close connection.",
+        description: error.message || "Error al cerrar la conexión.",
         variant: "destructive",
       });
     },
@@ -213,7 +213,7 @@ export default function NotificationsPage() {
       <div className="pt-16 pb-16 md:pb-0">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">Notifications</h1>
+            <h1 className="text-2xl font-bold">Notificaciones</h1>
             
             {user?.userType === "business" && (
               <Button 
@@ -221,7 +221,7 @@ export default function NotificationsPage() {
                 className="flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Send Notification
+                Enviar notificación
               </Button>
             )}
           </div>
@@ -232,10 +232,10 @@ export default function NotificationsPage() {
             onValueChange={setActiveTab}
             className="mb-6"
           >
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="unread">Unread</TabsTrigger>
-              <TabsTrigger value="read">Read</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="all">Todas</TabsTrigger>
+              <TabsTrigger value="unread">No leídas</TabsTrigger>
+              <TabsTrigger value="read">Leídas</TabsTrigger>
             </TabsList>
           </Tabs>
           
@@ -312,7 +312,7 @@ export default function NotificationsPage() {
                                       onClick={() => closeConnectionMutation.mutate(notification.connection.id)}
                                     >
                                       <X className="h-3 w-3 mr-1" />
-                                      Close Connection
+                                      Cerrar Conexión
                                     </Button>
                                   )}
                                 </div>
@@ -332,11 +332,11 @@ export default function NotificationsPage() {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
                   <Bell className="h-6 w-6 text-gray-500" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900">No Notifications</h3>
+                <h3 className="text-lg font-medium text-gray-900">Sin notificaciones</h3>
                 <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
                   {user?.userType === 'customer' 
-                    ? 'You haven\'t received any notifications yet. Connect with businesses to get updates.'
-                    : 'You haven\'t sent any notifications yet. Connect with customers to send updates.'}
+                    ? 'No has recibido notificaciones todavía. Conéctate con negocios para recibir actualizaciones.'
+                    : 'No has enviado notificaciones todavía. Conéctate con clientes para enviar actualizaciones.'}
                 </p>
                 {user?.userType === "business" && (
                   <Button 
@@ -344,7 +344,7 @@ export default function NotificationsPage() {
                     onClick={() => setShowNewNotificationDialog(true)}
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Send Notification
+                    Enviar Notificación
                   </Button>
                 )}
               </CardContent>
@@ -358,10 +358,10 @@ export default function NotificationsPage() {
       {/* Send Notification Dialog */}
       <Dialog open={showNewNotificationDialog} onOpenChange={setShowNewNotificationDialog}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Send Notification</DialogTitle>
+                    <DialogHeader>
+            <DialogTitle>Enviar notificación</DialogTitle>
             <DialogDescription>
-              Send a notification to one of your connected customers.
+              Envía una notificación a uno de tus clientes conectados.
             </DialogDescription>
           </DialogHeader>
           
@@ -372,19 +372,19 @@ export default function NotificationsPage() {
                 name="connectionId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Customer</FormLabel>
+                    <FormLabel>Cliente</FormLabel>
                     <Select 
                       onValueChange={field.onChange} 
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a customer" />
+                          <SelectValue placeholder="Selecciona un cliente" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {isLoadingConnections ? (
-                          <SelectItem value="loading" disabled>Loading connections...</SelectItem>
+                          {isLoadingConnections ? (
+                          <SelectItem value="loading" disabled>Cargando conexiones...</SelectItem>
                         ) : activeConnections && activeConnections.length > 0 ? (
                           activeConnections.map((connection: any) => (
                             <SelectItem 
@@ -394,8 +394,8 @@ export default function NotificationsPage() {
                               {connection.customer?.displayName} - {connection.serviceName}
                             </SelectItem>
                           ))
-                        ) : (
-                          <SelectItem value="none" disabled>No active connections</SelectItem>
+                          ) : (
+                          <SelectItem value="none" disabled>No hay conexiones activas</SelectItem>
                         )}
                       </SelectContent>
                     </Select>
@@ -409,9 +409,9 @@ export default function NotificationsPage() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Title</FormLabel>
+                    <FormLabel>Título</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Your car is ready for pickup" {...field} />
+                      <Input placeholder="p. ej., Tu auto está listo para recoger" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -423,10 +423,10 @@ export default function NotificationsPage() {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Message</FormLabel>
+                    <FormLabel>Mensaje</FormLabel>
                     <FormControl>
                       <Textarea 
-                        placeholder="e.g., The maintenance service for your car is complete. You can pick it up at our location." 
+                        placeholder="p. ej., El servicio de mantenimiento de tu auto está completo. Puedes recogerlo en nuestra ubicación." 
                         rows={4}
                         {...field} 
                       />
@@ -442,7 +442,7 @@ export default function NotificationsPage() {
                   variant="outline" 
                   onClick={() => setShowNewNotificationDialog(false)}
                 >
-                  Cancel
+                  Cancelar
                 </Button>
                 <Button 
                   type="submit"
@@ -455,12 +455,12 @@ export default function NotificationsPage() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
-                      Sending...
+                      Enviando...
                     </>
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
-                      Send Notification
+                      Enviar notificación
                     </>
                   )}
                 </Button>

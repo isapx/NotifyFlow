@@ -1,6 +1,6 @@
-# NotifyFlow — Instrucciones de instalación y ejecución
+# NotificApp — Instrucciones de instalación y ejecución
 
-Este README explica cómo preparar y ejecutar la aplicación NotifyFlow en otra máquina (desarrollo y producción). Incluye requisitos, configuración, y soluciones para acceso desde móviles.
+Este README explica cómo preparar y ejecutar la aplicación NotificApp en otra máquina (desarrollo y producción). Incluye requisitos, configuración, y soluciones para acceso desde móviles.
 
 **Resumen rápido**
 - Recomendado: Node 20.x (LTS). Node 22 puede funcionar pero la repo fue desarrollada con Node 20.
@@ -138,8 +138,4 @@ ngrok http 5173
 
 ---
 
-Si quieres, puedo:
-- añadir un script `dev:ngrok` que arranque Vite y cree el túnel ngrok automáticamente, o
-- generar instrucciones mkcert específicas si me das la IP local de la máquina.
 
-Archivo creado: `README.md` (raíz del repo)

@@ -93,20 +93,20 @@ export default function HistoryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">Connection History</h1>
+              <h1 className="text-2xl font-bold">Historial de conexiones</h1>
               
               <div className="flex items-center gap-2">
                 <Select 
                   value={filterStatus} 
                   onValueChange={setFilterStatus}
                 >
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Filter" />
+                    <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Filtro" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="closed">Closed</SelectItem>
+                    <SelectItem value="all">Todos</SelectItem>
+                    <SelectItem value="active">Activas</SelectItem>
+                    <SelectItem value="closed">Cerradas</SelectItem>
                   </SelectContent>
                 </Select>
                 
@@ -114,14 +114,14 @@ export default function HistoryPage() {
                   value={timeframe} 
                   onValueChange={setTimeframe}
                 >
-                  <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Timeframe" />
+                    <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Intervalo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Time</SelectItem>
-                    <SelectItem value="week">This Week</SelectItem>
-                    <SelectItem value="month">This Month</SelectItem>
-                    <SelectItem value="year">This Year</SelectItem>
+                    <SelectItem value="all">Todo el tiempo</SelectItem>
+                    <SelectItem value="week">Esta semana</SelectItem>
+                    <SelectItem value="month">Este mes</SelectItem>
+                    <SelectItem value="year">Este año</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -163,30 +163,30 @@ export default function HistoryPage() {
                           </div>
                           
                           <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="text-gray-500">Status:</div>
+                            <div className="text-gray-500">Estado:</div>
                             <div className="text-right">
                               <Badge variant={connection.status === "active" ? "success" : "secondary"}>
-                                {connection.status === "active" ? "Active" : "Closed"}
+                                {connection.status === "active" ? "Activa" : "Cerrada"}
                               </Badge>
                             </div>
                             
-                            <div className="text-gray-500">Created:</div>
+                            <div className="text-gray-500">Creado:</div>
                             <div className="text-right">
                               {formatDate(connection.createdAt)}
                             </div>
                             
                             {connection.closedAt && (
                               <>
-                                <div className="text-gray-500">Closed:</div>
+                                <div className="text-gray-500">Cerrado:</div>
                                 <div className="text-right">
                                   {formatDate(connection.closedAt)}
                                 </div>
                               </>
                             )}
                             
-                            <div className="text-gray-500">Type:</div>
+                            <div className="text-gray-500">Tipo:</div>
                             <div className="text-right">
-                              {entity?.userType === "business" ? "Business" : "Customer"}
+                              {entity?.userType === "business" ? "Negocio" : "Cliente"}
                             </div>
                           </div>
                         </CardContent>
@@ -199,11 +199,11 @@ export default function HistoryPage() {
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>{user?.userType === "business" ? "Customer" : "Business"}</TableHead>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Created</TableHead>
-                            <TableHead>Closed</TableHead>
+                            <TableHead>{user?.userType === "business" ? "Cliente" : "Negocio"}</TableHead>
+                            <TableHead>Servicio</TableHead>
+                            <TableHead>Estado</TableHead>
+                            <TableHead>Creado</TableHead>
+                            <TableHead>Cerrado</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -226,8 +226,8 @@ export default function HistoryPage() {
                                 </TableCell>
                                 <TableCell>{connection.serviceName}</TableCell>
                                 <TableCell>
-                                  <Badge variant={connection.status === "active" ? "success" : "secondary"}>
-                                    {connection.status === "active" ? "Active" : "Closed"}
+                                    <Badge variant={connection.status === "active" ? "success" : "secondary"}>
+                                    {connection.status === "active" ? "Activa" : "Cerrada"}
                                   </Badge>
                                 </TableCell>
                                 <TableCell>
@@ -261,17 +261,17 @@ export default function HistoryPage() {
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-4">
                     <FileText className="h-6 w-6 text-gray-500" />
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900">No Connection History</h3>
+                  <h3 className="text-lg font-medium text-gray-900">Sin historial de conexiones</h3>
                   <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
                     {user?.userType === 'customer' 
-                      ? 'You haven\'t connected with any businesses yet. Generate a QR code to start connecting.'
-                      : 'You haven\'t connected with any customers yet. Scan a customer\'s QR code to connect.'}
+                      ? 'No te has conectado con ningún negocio todavía. Genera un código QR para comenzar a conectar.'
+                      : 'No te has conectado con ningún cliente todavía. Escanea el código QR de un cliente para conectar.'}
                   </p>
                 </CardContent>
               </Card>
             )}
             
-            <h1 className="text-2xl font-bold mt-12 mb-6">Notification History</h1>
+            <h1 className="text-2xl font-bold mt-12 mb-6">Historial de notificaciones</h1>
             
             {isLoadingNotifications ? (
               <Card>
@@ -314,8 +314,8 @@ export default function HistoryPage() {
                               <Clock className="h-3 w-3" />
                               <span>{formatRelativeTime(notification.createdAt)}</span>
                             </div>
-                            <Badge variant={notification.isRead ? "outline" : "default"} className="text-xs">
-                              {notification.isRead ? "Read" : "Unread"}
+                              <Badge variant={notification.isRead ? "outline" : "default"} className="text-xs">
+                              {notification.isRead ? "Leído" : "No leído"}
                             </Badge>
                           </div>
                         </CardContent>
@@ -328,12 +328,12 @@ export default function HistoryPage() {
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Title</TableHead>
-                            <TableHead>Message</TableHead>
-                            <TableHead>{user?.userType === "business" ? "To" : "From"}</TableHead>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead>Título</TableHead>
+                            <TableHead>Mensaje</TableHead>
+                            <TableHead>{user?.userType === "business" ? "Para" : "De"}</TableHead>
+                            <TableHead>Servicio</TableHead>
+                            <TableHead>Fecha</TableHead>
+                            <TableHead>Estado</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -356,7 +356,7 @@ export default function HistoryPage() {
                               </TableCell>
                               <TableCell>
                                 <Badge variant={notification.isRead ? "outline" : "default"}>
-                                  {notification.isRead ? "Read" : "Unread"}
+                                  {notification.isRead ? "Leído" : "No leído"}
                                 </Badge>
                               </TableCell>
                             </TableRow>
