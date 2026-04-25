@@ -50,8 +50,20 @@ app.use((req, res, next) => {
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
+  // In development we normally mount Vite as middleware. For the
+  // alternative workflow where Vite runs as a standalone dev server
+  // (https://localhost:5173) and proxies API calls to this backend,
+  // set `SKIP_VITE=true` in the environment to skip mounting Vite here.
   if (app.get("env") === "development") {
-    await setupVite(app, server);
+    if (process.env.SKIP_VITE !== "true") {
+      await setupVite(app, server);
+    } else {
+      // SKIP_VITE=true: do not mount Vite middleware and do not try to
+      // serve static production files. This lets a standalone Vite dev
+      // server (running on :5173) handle the client assets and proxy
+      // API requests to this backend on :3000.
+      log("SKIP_VITE=true, skipping Vite middleware (run client separately)");
+    }
   } else {
     serveStatic(app);
   }

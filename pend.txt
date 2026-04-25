@@ -14,3 +14,8 @@ To deploy to production, you would need to:
 2. Copy .env.production.template to .env.production
 3. Update .env.production with your Neon database credentials
 4. Deploy your application
+
+
+npm install
+node version > 20.16
+npm run dev

@@ -34,6 +34,12 @@ export function QrScanner({
         throw new Error("Browser doesn't support camera access");
       }
 
+      // If there's an existing stream, stop it first to free the device
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        setStream(null);
+      }
+
       const constraints = {
         video: {
           facingMode: 'environment',
@@ -42,13 +48,36 @@ export function QrScanner({
         }
       };
 
-      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      let mediaStream: MediaStream | null = null;
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (innerErr) {
+        // If facingMode failed (common on desktops or certain cameras), try fallback
+        console.warn('getUserMedia with facingMode failed:', innerErr);
+
+        try {
+          // Try to enumerate devices and pick a video input if available
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const videoDevice = devices.find(d => d.kind === 'videoinput');
+
+          if (videoDevice && videoDevice.deviceId) {
+            mediaStream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: videoDevice.deviceId } } });
+          } else {
+            // As a last resort request any video device
+            mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          }
+        } catch (fallbackErr) {
+          throw fallbackErr;
+        }
+      }
+
       setStream(mediaStream);
 
       // Check if flash is available
       const track = mediaStream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities();
-      setHasFlash(capabilities.torch || false);
+      const capabilities = track.getCapabilities?.() || ({} as MediaTrackCapabilities);
+      setHasFlash(Boolean((capabilities as any).torch));
 
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
@@ -56,7 +85,10 @@ export function QrScanner({
         setupQrScanning(videoRef.current);
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to access camera';
+      const name = (err as any)?.name || 'Error';
+      const message = (err as any)?.message || String(err);
+      console.error('startScanner error', name, message, err);
+      const errorMessage = `${name}: ${message}`;
       setError(errorMessage);
       if (onError) onError(errorMessage);
     } finally {
@@ -88,6 +120,15 @@ export function QrScanner({
 
           if (code) {
             onScan(code.data);
+            // stop tracks once we have scanned a code to free camera
+            try {
+              if (videoElement.srcObject) {
+                const s = videoElement.srcObject as MediaStream;
+                s.getTracks().forEach(t => t.stop());
+              }
+            } catch (e) {
+              console.warn('Failed to stop tracks after scan', e);
+            }
             return;
           }
         }
@@ -111,13 +152,18 @@ export function QrScanner({
       const newFlashState = !isFlashOn;
       
       // Check if torch is supported
-      await track.applyConstraints({
-        advanced: [{ torch: newFlashState }]
-      });
+      if (typeof (track as any).applyConstraints === 'function') {
+        await (track as any).applyConstraints({ advanced: [{ torch: newFlashState }] });
+      } else {
+        throw new Error('applyConstraints not supported on this track');
+      }
       
       setIsFlashOn(newFlashState);
     } catch (err) {
-      const errorMessage = 'Failed to toggle flash';
+      console.error('toggleFlash error', err);
+      const name = (err as any)?.name || 'Error';
+      const message = (err as any)?.message || String(err);
+      const errorMessage = `${name}: ${message}`;
       setError(errorMessage);
       if (onError) onError(errorMessage);
     }
