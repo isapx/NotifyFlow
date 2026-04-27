@@ -72,7 +72,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50">
       <AppNavbar />
       
       <div className="pt-16 pb-16 md:pb-0">
@@ -80,7 +80,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Profile Info */}
             <div className="md:col-span-1">
-              <Card>
+              <Card className="border-2 border-green-300 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
                 <CardHeader className="pb-3">
                   <div className="flex justify-center mb-2">
                     <Avatar className="h-24 w-24">
@@ -89,7 +89,7 @@ export default function ProfilePage() {
                       </AvatarFallback>
                     </Avatar>
                   </div>
-                  <CardTitle className="text-center">{user?.displayName}</CardTitle>
+                  <CardTitle className="text-center text-green-700">{user?.displayName}</CardTitle>
                   <CardDescription className="text-center">
                     <Badge className="mt-1">
                       {user?.userType === "business" ? "Negocio" : "Cliente"}
@@ -152,9 +152,9 @@ export default function ProfilePage() {
             
             {/* Settings & Actions */}
             <div className="md:col-span-2">
-              <Card>
+              <Card className="border-2 border-cyan-300 bg-gradient-to-br from-cyan-50 to-blue-100 shadow-lg">
                 <CardHeader>
-                  <CardTitle>Configuración de la cuenta</CardTitle>
+                  <CardTitle className="text-cyan-700">Configuración de la cuenta</CardTitle>
                   <CardDescription>
                     Administra la configuración y preferencias de tu cuenta
                   </CardDescription>
@@ -236,9 +236,9 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
               
-              <Card className="mt-6">
+              <Card className="mt-6 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
                 <CardHeader>
-                  <CardTitle>Acerca de NotificApp</CardTitle>
+                  <CardTitle className="text-purple-700">Acerca de NotificApp</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600">

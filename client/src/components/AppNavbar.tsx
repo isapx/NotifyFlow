@@ -38,16 +38,16 @@ export function AppNavbar() {
   };
 
   return (
-    <nav className="bg-white shadow-sm fixed w-full z-10">
+    <nav className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 shadow-lg fixed w-full z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/">
               <div className="flex items-center cursor-pointer">
-                <div className="bg-primary text-white h-10 w-10 rounded-full flex items-center justify-center">
+                <div className="bg-white text-purple-600 h-10 w-10 rounded-full flex items-center justify-center shadow-lg font-bold">
                   <Bell className="h-5 w-5" />
                 </div>
-                <span className="ml-2 text-xl font-semibold text-gray-800">NotificApp</span>
+                <span className="ml-2 text-xl font-bold text-white drop-shadow-lg">NotificApp</span>
               </div>
             </Link>
           </div>
@@ -56,7 +56,7 @@ export function AppNavbar() {
             <Link href="/">
               <Button 
                 variant={location === "/" ? "default" : "ghost"}
-                className="flex items-center gap-2"
+                className={`flex items-center gap-2 ${location === "/" ? "bg-white text-purple-600 hover:bg-gray-100" : "text-white hover:bg-white hover:bg-opacity-20"}`}
                 size="sm"
               >
                 <Home className="h-4 w-4" />
@@ -67,7 +67,7 @@ export function AppNavbar() {
             <Link href="/history">
               <Button 
                 variant={location === "/history" ? "default" : "ghost"}
-                className="flex items-center gap-2"
+                className={`flex items-center gap-2 ${location === "/history" ? "bg-white text-purple-600 hover:bg-gray-100" : "text-white hover:bg-white hover:bg-opacity-20"}`}
                 size="sm"
               >
                 <History className="h-4 w-4" />
@@ -78,13 +78,13 @@ export function AppNavbar() {
             <Link href="/notifications">
               <Button 
                 variant={location === "/notifications" ? "default" : "ghost"}
-                className="flex items-center gap-2 relative"
+                className={`flex items-center gap-2 relative ${location === "/notifications" ? "bg-white text-purple-600 hover:bg-gray-100" : "text-white hover:bg-white hover:bg-opacity-20"}`}
                 size="sm"
               >
                 <Bell className="h-4 w-4" />
                 <span className="hidden sm:inline">Notificaciones</span>
                 {unreadCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs bg-red-500">
                     {unreadCount}
                   </Badge>
                 )}
@@ -94,9 +94,9 @@ export function AppNavbar() {
             {user && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full bg-white hover:bg-gray-100">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold">
                         {getInitials(user.displayName)}
                       </AvatarFallback>
                     </Avatar>
@@ -111,7 +111,7 @@ export function AppNavbar() {
                       <span>Perfil</span>
                     </DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Cerrar sesión</span>
                   </DropdownMenuItem>

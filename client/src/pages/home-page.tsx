@@ -147,7 +147,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
       <AppNavbar />
 
       <div className="pt-16 pb-16 md:pb-0">
@@ -156,36 +156,36 @@ export default function HomePage() {
           {isMobile && (
             <Card className="mb-6">
               <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-2">¡Bienvenido, {user?.displayName || "Usuario"}!</h2>
-                <p className="text-gray-600 mb-4">¿Qué te gustaría hacer hoy?</p>
+                <h2 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">¡Bienvenido, {user?.displayName || "Usuario"}!</h2>
+                <p className="text-blue-600 font-medium mb-4">¿Qué te gustaría hacer hoy?</p>
 
                 <div className="grid grid-cols-2 gap-4 mb-2">
                   {user?.userType === "customer" ? (
                     <Button 
                       variant="outline" 
-                      className="h-24 flex flex-col items-center justify-center gap-2"
+                      className="h-24 flex flex-col items-center justify-center gap-2 border-2 border-purple-300 bg-purple-50 hover:bg-purple-100"
                       onClick={() => setShowQRModal(true)}
                     >
-                      <QrCode className="h-6 w-6 text-primary" />
-                      <span className="text-sm font-medium">Generar QR</span>
+                      <QrCode className="h-6 w-6 text-purple-600" />
+                      <span className="text-sm font-medium text-purple-700">Generar QR</span>
                     </Button>
                   ) : (
                     <Button 
                       variant="outline" 
-                      className="h-24 flex flex-col items-center justify-center gap-2"
+                      className="h-24 flex flex-col items-center justify-center gap-2 border-2 border-blue-300 bg-blue-50 hover:bg-blue-100"
                       onClick={() => setShowScannerModal(true)}
                     >
-                      <ScanLine className="h-6 w-6 text-primary" />
-                      <span className="text-sm font-medium">Escanear QR</span>
+                      <ScanLine className="h-6 w-6 text-blue-600" />
+                      <span className="text-sm font-medium text-blue-700">Escanear QR</span>
                     </Button>
                   )}
 
                   <Button 
                     variant="outline" 
-                    className="h-24 flex flex-col items-center justify-center gap-2"
+                    className="h-24 flex flex-col items-center justify-center gap-2 border-2 border-pink-300 bg-pink-50 hover:bg-pink-100"
                   >
-                    <Bell className="h-6 w-6 text-primary" />
-                    <span className="text-sm font-medium">Notificaciones</span>
+                    <Bell className="h-6 w-6 text-pink-600" />
+                    <span className="text-sm font-medium text-pink-700">Notificaciones</span>
                   </Button>
                 </div>
               </CardContent>
@@ -197,9 +197,9 @@ export default function HomePage() {
             <div className="grid grid-cols-3 gap-6">
               {/* Left Column */}
               <div className="col-span-1">
-                <Card className="mb-6">
+                <Card className="mb-6 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
                   <CardHeader>
-                      <CardTitle>Acciones rápidas</CardTitle>
+                      <CardTitle className="text-purple-700">Acciones rápidas</CardTitle>
                     </CardHeader>
                   <CardContent className="space-y-3">
                     {user?.userType === "customer" ? (
@@ -230,30 +230,30 @@ export default function HomePage() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
                   <CardHeader>
-                    <CardTitle>Tus estadísticas</CardTitle>
+                    <CardTitle className="text-blue-700">Tus estadísticas</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Conexiones activas</span>
+                      <span className="text-blue-600 font-medium">Conexiones activas</span>
                       <span className="font-medium">{activeConnections.length}</span>
                     </div>
-                    <div className="h-px bg-gray-200"></div>
+                    <div className="h-px bg-blue-300"></div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Notificaciones este mes</span>
+                      <span className="text-blue-600 font-medium">Notificaciones este mes</span>
                       <span className="font-medium">{notifications?.length || 0}</span>
                     </div>
-                    <div className="h-px bg-gray-200"></div>
+                    <div className="h-px bg-blue-300"></div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">
+                      <span className="text-blue-600 font-medium">
                         {user?.userType === 'customer' ? 'Códigos QR generados' : 'Códigos QR escaneados'}
                       </span>
                       <span className="font-medium">0</span>
                     </div>
-                    <div className="h-px bg-gray-200"></div>
+                    <div className="h-px bg-blue-300"></div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Servicios completados</span>
+                      <span className="text-blue-600 font-medium">Servicios completados</span>
                       <span className="font-medium">0</span>
                     </div>
                   </CardContent>
